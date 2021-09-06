@@ -12,7 +12,7 @@ server.use(cors());
 
 class Forecast {
     constructor(description, date) {
-        this.description= description;
+        this.description = description;
         this.date = date;
     }
 }
@@ -31,28 +31,21 @@ server.get('/weather', (req, res) => {
 
         }
     })
-    labib = (labib === undefined) ? 'no data avilabile ' : labib
     let arrForecast = []
-    labib.data.forEach((value)=>{
-        arrForecast.push(new Forecast (value.weather.description,value.datetime));
-    })
-     
-    
-    
+    if (labib === undefined) {
+        arrForecast.push("Sorry... there is no data")
+    }
+    else {
+        labib.data.forEach((value) => {
+            arrForecast.push(new Forecast(value.weather.description, value.datetime));
+        })
+    }
+
+
+
+
     res.send(arrForecast);
 })
-
-// server.get('/getDataFromPoke',(req,res)=>{
-//    
-//     console.log(req.query);
-//     let pokemonName = req.query.pokeName;
-//     let pokeInfo = pokeData.results.find(pokemon=>{
-//         if(pokemon.name.toLowerCase()===pokemonName) {
-//             return pokemon;
-//         }
-//     })
-//     res.send(pokeInfo);
-// })
 
 
 server.get('*', (req, res) => {
