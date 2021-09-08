@@ -93,7 +93,7 @@ server.get('/weather', async (req, res) => {
 
 server.get('/movie', async (req, res) => {
     let cityName = req.query.query
-    let movieURL = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=cityName`
+    let movieURL = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${cityName}`
     let movieData2 = (await axios.get(movieURL)).data.results
     // console.log(movieData2);
     let arrOfMovies = []
