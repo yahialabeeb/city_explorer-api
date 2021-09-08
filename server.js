@@ -3,114 +3,76 @@
 const express = require('express')
 require('dotenv').config();
 const cors = require('cors')
-const weatherData = require('./data/weather.json')
-const axios = require('axios')
+// const handleWeather = require('./data/weather.json')
 
 const server = express();
 const PORT = process.env.PORT
 server.use(cors());
 
 
-class Forecast {
-    constructor(description, date) {
-        this.description = description;
-        this.date = date;
-    }
-}
-class Movies {
-    constructor(title, overview, average_votes, total_votes, popularity, released_on) {
-        this.released_on = released_on;
-        this.title = title;
-        this.overview = overview;
-        this.average_votes = average_votes;
-        this.total_votes = total_votes;
-
-        this.popularity = popularity;
-    }
-}
-
-
-
-server.get('/weatherin', (req, res) => {
-    let cityName = req.query.cityName
-    let cityLat = req.query.lat
-    let cityLon = req.query.citylon
-    let labib = weatherData.find((val) => {
-        if (val.city_name.toLowerCase() === cityName.toLowerCase() ||
-            Math.floor(val.lat) === Math.floor(cityLat) ||
-            Math.floor(val.lon) === Math.floor(cityLon)
-        ) {
-
-            return val;
-
-        }
-    })
-    let arrForecast = []
-    if (labib === undefined) {
-        arrForecast.push("Sorry... there is no data")
-    }
-    else {
-        labib.data.forEach((value) => {
-            arrForecast.push(new Forecast(value.weather.description, value.datetime));
-        })
-    }
+const handleMovie = require('./modules/movie.module.js')
+const handleWeather = require('./modules/weather.module.js')
 
 
 
 
-    res.send(arrForecast);
-})
 
 
-// LAB08 
+// LAB08 & lab09 
 // weathers 
 
-// `https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName}&lat=${cityLat}&lon=${cityLon}&key=${process.env.WEATHER_API_KEY}&days=7`
+// `https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName}&lat=${lat}&lon=${lon}&key=${process.env.WEATHER_API_KEY}&days=7`
 
 
-server.get('/weather', async (req, res) => {
-    let cityName = req.query.cityName
-    let cityLat = req.query.lat
-    let cityLon = req.query.citylon
-    let weatherURL2 = `https://api.weatherbit.io/v2.0/forecast/daily?city=amman&&key=${process.env.WEATHER_API_KEY}&days=7`
-    let weatherData2 = (await axios.get(weatherURL2)).data.data
-    console.log(weatherData2);
-    let arrForecast = []
-
-    weatherData2.forEach((value) => {
-        arrForecast.push(new Forecast(value.weather.description, value.datetime));
-    })
-
-    res.send(arrForecast);
-
-})
-
-
+server.get('/weather', handleWeather)
 
 
 // moves
 // `https://api.themoviedb.org/3/search/movie?api_key=${}&query=${cityName}`
 
-server.get('/movie', async (req, res) => {
-    let cityName1 = req.query.cityName
-    let movieURL = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${cityName1}`
-    let movieData2 = (await axios.get(movieURL)).data.results
-    // console.log(movieData2);
-    let arrOfMovies = []
-    // there is no img url 
-    movieData2.forEach((item) => {
-        arrOfMovies.push(new Movies(item.title, item.overview, item.vote_average, item.vote_count, item.popularity, item.release_date));
-    })
-    console.log(arrOfMovies);
-    res.send(arrOfMovies);
+server.get('/movie', handleMovie)
 
-})
 
+// notfound
 server.get('*', (req, res) => {
-    res.status(404).send('not found')
+    res.status(404).send('not found');
 })
+
+// sitting a port
 
 
 server.listen(PORT, () => {
     console.log(`Listning on PORT ${PORT}`)
 })
+
+
+// lab07
+// server.get('/weatherin', (req, res) => {
+//     let cityName = req.query.cityName
+//     let cityLat = req.query.lat
+//     let cityLon = req.query.citylon
+//     let labib = weatherData.find((val) => {
+//         if (val.city_name.toLowerCase() === cityName.toLowerCase() ||
+//             Math.floor(val.lat) === Math.floor(cityLat) ||
+//             Math.floor(val.lon) === Math.floor(cityLon)
+//         ) {
+
+//             return val;
+
+//         }
+//     })
+//     let arrForecast = []
+//     if (labib === undefined) {
+//         arrForecast.push("Sorry... there is no data")
+//     }
+//     else {
+//         labib.data.forEach((value) => {
+//             arrForecast.push(new Forecast(value.weather.description, value.datetime));
+// //         })
+// //     }
+
+
+
+
+//     res.send(arrForecast);
+// })
