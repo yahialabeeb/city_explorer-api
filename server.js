@@ -24,7 +24,7 @@ class Movies {
         this.overview = overview;
         this.average_votes = average_votes;
         this.total_votes = total_votes;
-    
+
         this.popularity = popularity;
     }
 }
@@ -92,16 +92,16 @@ server.get('/weather', async (req, res) => {
 // `https://api.themoviedb.org/3/search/movie?api_key=${}&query=${cityName}`
 
 server.get('/movie', async (req, res) => {
-    let cityName = req.query.query
-    let movieURL = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${cityName}`
+    let cityName1 = req.query.cityName
+    let movieURL = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${cityName1}`
     let movieData2 = (await axios.get(movieURL)).data.results
     // console.log(movieData2);
     let arrOfMovies = []
-// there is no img url 
+    // there is no img url 
     movieData2.forEach((item) => {
         arrOfMovies.push(new Movies(item.title, item.overview, item.vote_average, item.vote_count, item.popularity, item.release_date));
     })
-
+    console.log(arrOfMovies);
     res.send(arrOfMovies);
 
 })
