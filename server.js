@@ -15,6 +15,19 @@ const handleWeather = require('./modules/weather.module.js')
 
 
 
+// sitting a port
+
+
+server.listen(PORT, () => {
+    console.log(`Listning on PORT ${PORT}`)
+})   
+
+
+
+// lab10
+
+
+
 
 
 
@@ -38,12 +51,7 @@ server.get('*', (req, res) => {
     res.status(404).send('not found');
 })
 
-// sitting a port
 
-
-server.listen(PORT, () => {
-    console.log(`Listning on PORT ${PORT}`)
-})
 
 
 // lab07
